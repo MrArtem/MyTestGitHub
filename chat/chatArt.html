@@ -1,0 +1,46 @@
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="D:\артем\style.css">
+ <link rel="stylesheet" type="text/css" href="D:\артем\bootstrap_2.3.2\bootstrap.css">
+<title>Chat Art</title>
+
+<style>
+body {background: url(black2.jpg);}
+</style>
+</head>
+<body> 
+
+<div id="header" class="uphead">
+  <h1 align="center" style="color:white"><big><strong><em>Chat Art</em><strong></big>
+</div>
+
+  <div id="content"> 
+    <div id="left" class="info">	 
+	     <label for="inputPassword3" class="col-sm-2 control-label">Name</label> <br>
+	     <input type = "text" name = "firstname" value = "Name"> <br>
+	     <label for="inputPassword3" class="col-sm-2 control-label">Surname</label> <br>
+         <input type = "text" name = "surname" value = "Surname">	   <br>
+	   <div align="center">
+	     <input type = "submit"  value = "Rename" class="btn btn-inverse">
+	   </div>
+	</div>
+	
+    <div id="right" class="inforight">
+	</div>
+	
+    <div id="center" >
+	  <select name = "messages"  class="message" multiple="multiple" size="15"></select>
+	  <div>
+        <textarea name = "message" class="sendmessage">Message</textarea>
+		 <input type = "submit"  value = "Send" class="btn btn-inverse">
+	  </div>
+	  <div>
+	    <input type = "submit"  value = "Delete" class="btn btn-inverse">
+	    <input type = "submit"  value = "Change" class="btn btn-inverse">
+	  </div>
+	</div>	
+  </div>
+  
+
+</body>
+</html>
