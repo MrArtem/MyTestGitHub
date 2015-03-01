@@ -45,3 +45,12 @@ background-color:gray;
 resize:none;
 width:40%;
 }
+.circle{width:30px;
+height:30px;
+border-radius:20px;
+font-size:10px;
+color:black;
+line-height:20px;
+text-align:center;
+background:white;
+}
