@@ -11,8 +11,9 @@ body {background: url(black2.jpg);}
 </head>
 <body onload="run();"> 
 
+<div class="chat hiddenDiv" id="ChatArt">
 <div id="header" class="uphead">
-  <h1 align="center" style="color:white"><big><strong><em>Chat Art</em><strong></big>
+  <h1 align="center" class="ChatArt"><big><strong><em>Chat Art</em><strong></big>
 </div>
 
   <div id="content"> 
@@ -42,7 +43,40 @@ body {background: url(black2.jpg);}
 	  </div>
 	</div>	
   </div>
-  
+</div> 
 
+ <div class="login" id="Login">
+<div style="padding-left:20%">
+  <h2 style="color:white"><strong><b>ChatArt<b></strong></h2>
+</div>
+ <div class="infologin">
+  <div class="control-group">
+   <label class="control-label  colorTextLogin" for="inputEmail">Name</label>
+  <div class="controls">
+   <input type="text" id="inputName" placeholder="Name">
+ </div>
+</div>
+
+<div class="control-group">
+  <label class="control-label colorTextLogin"  for="inputEmail">Surname</label>
+ <div class="controls">
+  <input type="text" id="inputSurName" placeholder="Surname">
+ </div>
+</div>
+
+<div class="control-group">
+   <label class="control-label  colorTextLogin" for="inputPassword">Password</label>
+ <div class="controls">
+   <input type="password" id="inputPassword" placeholder="Password">
+ </div>
+</div>
+
+  <div class="control-group">
+   <div class="controls">
+    <button id="signin" type="submit" class="btn btn-inverse">Sign in</button>
+   </div>
+  </div>
+ </div>
+</div>
 </body>
 </html>
