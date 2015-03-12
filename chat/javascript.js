@@ -27,14 +27,13 @@ function run() {
     appContainerDelete.addEventListener('click', delegateEventDelete);
     appContainerChange.addEventListener('click', delegateEventChange);
     appContainerSelect.addEventListener('click', delegateEventSelect);
-    appContainerSignIn.addEventListener('click', delegateEventSignIn);
     appContainerServer.addEventListener('click', delegateEventServer);
 }
 function delegateEventSend(evtObj) {
     var text = document.getElementById('sendText');
     var name = document.getElementById('name');
     var surname = document.getElementById('surname');
-    if (text.value) {
+    if (text.value && name.value && surname.value) {
 
         var select = document.getElementById("allMessages");
         var option = document.createElement("option");
@@ -45,7 +44,6 @@ function delegateEventSend(evtObj) {
 
         listForSaving.push( messageOption(option.text, option.value));
         storeMessages(listForSaving);
-        storeInfoLogin(infoLogin(name.value,surname.value));
 
         text.value = "";
     }
@@ -54,6 +52,10 @@ function delegateEventDelete(evtObj) {
     var select = document.getElementById("allMessages");
     var sendText = document.getElementById('sendText');
     select.remove(select.selectedIndex);
+
+    listForSaving.splice(select.selectedIndex, 1);
+    storeMessages(listForSaving);
+
     sendText.value = "";
 }
 function delegateEventSelect(evtObj) {
@@ -133,13 +135,30 @@ function addAllMessages(message) {
 
 $(document).ready(function () {
 
-    $(document).on('click', '#Rename', function () {
+    $(document).on('click', '#logOut', function () {
         var d = $('#Login');
         var dOpt = {
             title: 'Login',
             modal: true,
             resizable: false,
-        };
+           
+            buttons: {
+                SignIn: function () {
+                    var inputName = document.getElementById('inputName');
+                    var inputSurName = document.getElementById('inputSurName');
+
+                    var name = document.getElementById('name');
+                    var surname = document.getElementById('surname');
+
+                    name.value = inputName.value;
+                    surname.value = inputSurName.value;
+
+                    storeInfoLogin(infoLogin(name.value, surname.value));
+
+                    $(this).dialog("close");
+                  }
+                }
+            };
         d.dialog(dOpt);
     });
 });

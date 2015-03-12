@@ -27,7 +27,6 @@ color:white;
 
 .info{
 background-color:gray;
-padding-top:10%;
 height:100%;
 }
 .inforight{
@@ -84,4 +83,8 @@ background:white;
 .colorTextLogin
 {
     color:white;
+}
+.logout
+{
+  padding-bottom:20%;   
 }
