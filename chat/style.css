@@ -88,3 +88,11 @@ background:white;
 {
   padding-bottom:20%;   
 }
+.strikeout {
+	text-decoration: line-through;
+	color: gray;
+}
+.renameDiv
+{
+  padding-top:20%;   
+}

@@ -18,10 +18,10 @@ function run() {
     var appContainerSelect = document.getElementById('allMessages');
     var appContainerServer = document.getElementById('server');
 
-    var allMessages = restoreMessages();
-    var loginInfo = restoreLoginInfo();
-    createAllMessages(allMessages);
-    createLoginInfo(loginInfo);
+    if (restoreMessages() != null) {
+        var allMessages = restoreMessages();
+        createAllMessages(allMessages);
+    }
 
     appContainerSend.addEventListener('click', delegateEventSend);
     appContainerDelete.addEventListener('click', delegateEventDelete);
@@ -49,11 +49,17 @@ function delegateEventSend(evtObj) {
     }
 }
 function delegateEventDelete(evtObj) {
-    var select = document.getElementById("allMessages");
     var sendText = document.getElementById('sendText');
-    select.remove(select.selectedIndex);
 
-    listForSaving.splice(select.selectedIndex, 1);
+    var name = document.getElementById('name');
+    var surname = document.getElementById('surname');
+
+    var index = document.getElementById("allMessages").selectedIndex;
+    var select = document.getElementById("allMessages")[index];
+
+    select.text = "deleted";
+
+    listForSaving[index] = messageOption("deleted", index);
     storeMessages(listForSaving);
 
     sendText.value = "";
@@ -73,7 +79,13 @@ function delegateEventChange(evtObj) {
 
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
-    select.text = surname.value + " " + name.value + " : " + sendText.value;
+
+    select.text = surname.value + " " + name.value + " : " + sendText.value+" "; 
+   
+
+    listForSaving[index] = messageOption(select.text, index);
+    storeMessages(listForSaving);
+
     sendText.value = "";
 }
 
@@ -117,48 +129,85 @@ function createAllMessages(allMessages) {
         addAllMessages(allMessages[i]);
     }
 }
-function createLoginInfo(loginInfo) {
-    var inputName = document.getElementById('inputName');
-    var inputSurName = document.getElementById('inputSurName');
-
-    inputName.value = loginInfo.name;
-    inputSurName.value = loginInfo.surname;
-}
 function addAllMessages(message) {
-    var select = document.getElementById('allMessages');
-    var option = document.createElement("option");
-    option.text = message.message;
-    option.value = message.id;
+    
+        var select = document.getElementById('allMessages');
+        var option = document.createElement("option");
+        option.text = message.message;
+        option.value = message.id;
 
-    select.add(option);
+        select.add(option);
+    
 }
+function ActiveInfoLogin() {
+    var infoLogin = restoreLoginInfo();
+    var name = document.getElementById('name');
+    var surname = document.getElementById('surname');
 
+    name.value = infoLogin.name;
+    surname.value = infoLogin.surname;
+}
+function LogOutFromChat() {
+    storeInfoLogin(null);
+}
 $(document).ready(function () {
+    var isNotLogin = restoreLoginInfo() == null;
 
+    var dialog = $('#Login').dialog({
+        title: 'Login',
+        modal: true,
+        resizable: false,
+        autoOpen: isNotLogin,
+
+        buttons: {
+            SignIn: function () {
+                var inputName = document.getElementById('inputName');
+                var inputSurName = document.getElementById('inputSurName');
+
+                var name = document.getElementById('name');
+                var surname = document.getElementById('surname');
+
+                name.value = inputName.value;
+                surname.value = inputSurName.value;
+                inputName.value = null;
+                inputSurName.value = null;
+
+                storeInfoLogin(infoLogin(name.value, surname.value));
+
+                $(this).dialog("close");
+            }
+        }
+    });
+    if (isNotLogin == false) {
+        ActiveInfoLogin();
+    }
     $(document).on('click', '#logOut', function () {
-        var d = $('#Login');
-        var dOpt = {
-            title: 'Login',
-            modal: true,
-            resizable: false,
-           
-            buttons: {
-                SignIn: function () {
-                    var inputName = document.getElementById('inputName');
-                    var inputSurName = document.getElementById('inputSurName');
 
-                    var name = document.getElementById('name');
-                    var surname = document.getElementById('surname');
+        LogOutFromChat();
 
-                    name.value = inputName.value;
-                    surname.value = inputSurName.value;
+        var name = document.getElementById('name');
+        var surname = document.getElementById('surname');
+        name.value = null;
+        surname.value = null;
+        dialog.dialog('open');
 
-                    storeInfoLogin(infoLogin(name.value, surname.value));
+    });
+});
 
-                    $(this).dialog("close");
-                  }
-                }
-            };
-        d.dialog(dOpt);
+$(function () {
+    $("#RenameDiv").dialog({
+        autoOpen: false,
+        show: {
+            effect: "blind",
+            duration: 1000
+        },
+        hide: {
+            effect: "explode",
+            duration: 1000
+        }
+    });
+
+    $("#rename").click(function () {
+        $("#RenameDiv").dialog("open");
     });
 });
