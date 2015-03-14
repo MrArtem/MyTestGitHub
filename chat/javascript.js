@@ -69,24 +69,26 @@ function delegateEventSelect(evtObj) {
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
     var subindex = select.text.indexOf(":");
-    sendText.value = select.text.substring(subindex+1);
+    if (select.text != "deleted") {
+        sendText.value = select.text.substring(subindex + 1);
+    }
 }
 function delegateEventChange(evtObj) {
     var sendText = document.getElementById('sendText');
+    if (sendText.value != "") {
+        var name = document.getElementById('name');
+        var surname = document.getElementById('surname');
 
-    var name = document.getElementById('name');
-    var surname = document.getElementById('surname');
+        var index = document.getElementById("allMessages").selectedIndex;
+        var select = document.getElementById("allMessages")[index];
 
-    var index = document.getElementById("allMessages").selectedIndex;
-    var select = document.getElementById("allMessages")[index];
+        select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + '\u270e';
 
-    select.text = surname.value + " " + name.value + " : " + sendText.value+" "; 
-   
+        listForSaving[index] = messageOption(select.text, index);
+        storeMessages(listForSaving);
 
-    listForSaving[index] = messageOption(select.text, index);
-    storeMessages(listForSaving);
-
-    sendText.value = "";
+        sendText.value = null;
+    }
 }
 
 function delegateEventServer(evtObj) {
@@ -204,10 +206,35 @@ $(function () {
         hide: {
             effect: "explode",
             duration: 1000
+        },
+        buttons:{
+            OK:function(){
+               var name = document.getElementById('name');
+               var surname = document.getElementById('surname');
+
+               var changeName = document.getElementById('changeName');
+               var changeSurname = document.getElementById('changeSurname');
+               
+               name.value = changeName.value;
+               surname.value = changeSurname.value;
+               changeName.value = null;
+               changeSurname.value = null;
+               storeInfoLogin(infoLogin(name.value, surname.value));
+
+               $(this).dialog("close");
+            }
         }
     });
 
     $("#rename").click(function () {
+               var changeName = document.getElementById('changeName');
+               var changeSurname = document.getElementById('changeSurname');
+
+               var name = document.getElementById('name');
+               var surname = document.getElementById('surname');
+
+               changeName.value = name.value;
+               changeSurname.value = surname.value;
         $("#RenameDiv").dialog("open");
     });
 });
