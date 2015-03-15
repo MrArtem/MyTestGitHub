@@ -174,14 +174,17 @@ $(document).ready(function () {
                 var name = document.getElementById('name');
                 var surname = document.getElementById('surname');
 
-                name.value = inputName.value;
-                surname.value = inputSurName.value;
-                inputName.value = null;
-                inputSurName.value = null;
+                if (inputName.value != "" && inputSurName != "") {
+                    name.value = inputName.value;
+                    surname.value = inputSurName.value;
+                    inputName.value = null;
+                    inputSurName.value = null;
 
-                storeInfoLogin(infoLogin(name.value, surname.value));
-
-                $(this).dialog("close");
+                    storeInfoLogin(infoLogin(name.value, surname.value));
+                    $(this).dialog("close");
+                } else {
+                    alert("Enter name or surname !")
+                }
             }
         }
     });
