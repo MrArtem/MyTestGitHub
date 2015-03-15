@@ -82,6 +82,7 @@ function delegateEventChange(evtObj) {
         var index = document.getElementById("allMessages").selectedIndex;
         var select = document.getElementById("allMessages")[index];
 
+
         select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + '\u270e';
 
         listForSaving[index] = messageOption(select.text, index);
