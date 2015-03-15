@@ -57,9 +57,9 @@ function delegateEventDelete(evtObj) {
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
 
-    select.text = "deleted";
+    select.text = '\u2421';
 
-    listForSaving[index] = messageOption("deleted", index);
+    listForSaving[index] = messageOption('\u2421', index);
     storeMessages(listForSaving);
 
     sendText.value = "";
@@ -69,8 +69,12 @@ function delegateEventSelect(evtObj) {
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
     var subindex = select.text.indexOf(":");
-    if (select.text != "deleted") {
-        sendText.value = select.text.substring(subindex + 1);
+    if (select.text != '\u2421') {
+        if (select.text.indexOf('\u270e') != -1) {
+            sendText.value = select.text.substring(subindex + 1, select.text.indexOf('\u270e'));      
+        } else {
+            sendText.value = select.text.substring(subindex + 1);
+        }
     }
 }
 function delegateEventChange(evtObj) {
