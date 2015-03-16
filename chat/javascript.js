@@ -14,8 +14,8 @@ var listForSaving = [];
 function run() {
     var appContainerSend = document.getElementById('send');
     var appContainerDelete = document.getElementById('delete');
-    var appContainerChange = document.getElementById('change');
     var appContainerSelect = document.getElementById('allMessages');
+    var appContainerEnterMessage = document.getElementById('sendText');
     var appContainerServer = document.getElementById('server');
 
     if (restoreMessages() != null) {
@@ -25,27 +25,56 @@ function run() {
 
     appContainerSend.addEventListener('click', delegateEventSend);
     appContainerDelete.addEventListener('click', delegateEventDelete);
-    appContainerChange.addEventListener('click', delegateEventChange);
     appContainerSelect.addEventListener('click', delegateEventSelect);
     appContainerServer.addEventListener('click', delegateEventServer);
+    appContainerEnterMessage.addEventListener('keypress', delegateEventEnterMessage);
+    
 }
 function delegateEventSend(evtObj) {
-    var text = document.getElementById('sendText');
-    var name = document.getElementById('name');
-    var surname = document.getElementById('surname');
-    if (text.value && name.value && surname.value) {
+    var index = document.getElementById("allMessages").selectedIndex;
+    if (index == -1) {
+        var text = document.getElementById('sendText');
+        var name = document.getElementById('name');
+        var surname = document.getElementById('surname');
+        if (text.value && name.value && surname.value) {
 
-        var select = document.getElementById("allMessages");
-        var option = document.createElement("option");
-        option.text = surname.value + " " + name.value + " : " + text.value;
-        option.value = select.length;
+            var select = document.getElementById("allMessages");
+            var option = document.createElement("option");
+            option.text = surname.value + " " + name.value + " : " + text.value;
+            option.value = select.length;
 
-        select.add(option);
+            select.add(option);
 
-        listForSaving.push( messageOption(option.text, option.value));
-        storeMessages(listForSaving);
+            listForSaving.push(messageOption(option.text, option.value));
+            storeMessages(listForSaving);
 
-        text.value = "";
+            text.value = "";
+        }
+    } else {
+
+        var sendText = document.getElementById('sendText');
+        if (sendText.value != "") {
+            var name = document.getElementById('name');
+            var surname = document.getElementById('surname');
+
+            var index = document.getElementById("allMessages").selectedIndex;
+            var select = document.getElementById("allMessages")[index];
+
+
+            select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + '\u270e';
+
+            listForSaving[index] = messageOption(select.text, index);
+            storeMessages(listForSaving);
+            select.selected = false;
+            
+            sendText.value = null;
+        }   
+
+    }
+}
+function delegateEventEnterMessage(evtObj) {
+    if (evtObj.keyCode == "13") {
+        delegateEventSend(evtObj)
     }
 }
 function delegateEventDelete(evtObj) {
@@ -61,39 +90,24 @@ function delegateEventDelete(evtObj) {
 
     listForSaving[index] = messageOption('\u2421', index);
     storeMessages(listForSaving);
-
     sendText.value = "";
+    select.selected = false;
 }
 function delegateEventSelect(evtObj) {
     var sendText = document.getElementById('sendText');
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
-    var subindex = select.text.indexOf(":");
     if (select.text != '\u2421') {
+        var subindex = select.text.indexOf(":");
         if (select.text.indexOf('\u270e') != -1) {
-            sendText.value = select.text.substring(subindex + 1, select.text.indexOf('\u270e'));      
+            sendText.value = select.text.substring(subindex + 1, select.text.indexOf('\u270e'));
         } else {
             sendText.value = select.text.substring(subindex + 1);
         }
+    } else {
+            select.selected = false;
     }
-}
-function delegateEventChange(evtObj) {
-    var sendText = document.getElementById('sendText');
-    if (sendText.value != "") {
-        var name = document.getElementById('name');
-        var surname = document.getElementById('surname');
 
-        var index = document.getElementById("allMessages").selectedIndex;
-        var select = document.getElementById("allMessages")[index];
-
-
-        select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + '\u270e';
-
-        listForSaving[index] = messageOption(select.text, index);
-        storeMessages(listForSaving);
-
-        sendText.value = null;
-    }
 }
 
 function delegateEventServer(evtObj) {
@@ -246,3 +260,4 @@ $(function () {
         $("#RenameDiv").dialog("open");
     });
 });
+
