@@ -229,34 +229,35 @@ $(function () {
             effect: "explode",
             duration: 1000
         },
-        buttons:{
-            OK:function(){
-               var name = document.getElementById('name');
-               var surname = document.getElementById('surname');
+        buttons: {
+            OK: function () {
+                var name = document.getElementById('name');
+                var surname = document.getElementById('surname');
 
-               var changeName = document.getElementById('changeName');
-               var changeSurname = document.getElementById('changeSurname');
-               
-               name.value = changeName.value;
-               surname.value = changeSurname.value;
-               changeName.value = null;
-               changeSurname.value = null;
-               storeInfoLogin(infoLogin(name.value, surname.value));
+                var changeName = document.getElementById('changeName');
+                var changeSurname = document.getElementById('changeSurname');
+                if (changeName.value != "" && changeSurname.value != "") {
+                    name.value = changeName.value;
+                    surname.value = changeSurname.value;
+                    changeName.value = null;
+                    changeSurname.value = null;
+                    storeInfoLogin(infoLogin(name.value, surname.value));
 
-               $(this).dialog("close");
+                    $(this).dialog("close");
+                }
             }
         }
     });
 
     $("#rename").click(function () {
-               var changeName = document.getElementById('changeName');
-               var changeSurname = document.getElementById('changeSurname');
+        var changeName = document.getElementById('changeName');
+        var changeSurname = document.getElementById('changeSurname');
 
-               var name = document.getElementById('name');
-               var surname = document.getElementById('surname');
+        var name = document.getElementById('name');
+        var surname = document.getElementById('surname');
 
-               changeName.value = name.value;
-               changeSurname.value = surname.value;
+        changeName.value = name.value;
+        changeSurname.value = surname.value;
         $("#RenameDiv").dialog("open");
     });
 });
