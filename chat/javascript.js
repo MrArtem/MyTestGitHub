@@ -11,6 +11,8 @@ var infoLogin = function (name, surname) {
     };
 };
 var listForSaving = [];
+var deleteIconUtfCode = '\u2421';
+var changeIconUtfCode = '\u270e';
 function run() {
     var appContainerSend = document.getElementById('send');
     var appContainerDelete = document.getElementById('delete');
@@ -61,7 +63,7 @@ function delegateEventSend(evtObj) {
             var select = document.getElementById("allMessages")[index];
 
 
-            select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + '\u270e';
+            select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + changeIconUtfCode;
 
             listForSaving[index] = messageOption(select.text, index);
             storeMessages(listForSaving);
@@ -86,9 +88,9 @@ function delegateEventDelete(evtObj) {
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
 
-    select.text = '\u2421';
+    select.text = deleteIconUtfCode;
 
-    listForSaving[index] = messageOption('\u2421', index);
+    listForSaving[index] = messageOption(deleteIconUtfCode, index);
     storeMessages(listForSaving);
     sendText.value = "";
     select.selected = false;
@@ -97,10 +99,10 @@ function delegateEventSelect(evtObj) {
     var sendText = document.getElementById('sendText');
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
-    if (select.text != '\u2421') {
+    if (select.text != deleteIconUtfCode) {
         var subindex = select.text.indexOf(":");
-        if (select.text.indexOf('\u270e') != -1) {
-            sendText.value = select.text.substring(subindex + 1, select.text.indexOf('\u270e'));
+        if (select.text.indexOf(changeIconUtfCode) != -1) {
+            sendText.value = select.text.substring(subindex + 1, select.text.indexOf(changeIconUtfCode));
         } else {
             sendText.value = select.text.substring(subindex + 1);
         }
