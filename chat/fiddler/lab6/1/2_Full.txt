@@ -1,0 +1,9 @@
+GET http://localhost:999/chat?token=TN11EN HTTP/1.1
+Host: localhost:999
+
+
+HTTP/1.1 200 OK
+Date: Sun, 22 Mar 2015 18:27:25 GMT
+Content-length: 59
+
+{"messages":["hi","hello","h r you","ok"],"token":"TN43EN"}
