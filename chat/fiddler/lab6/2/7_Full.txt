@@ -1,10 +1,11 @@
-GET http://localhost:999/chat?token=TN35EN HTTP/1.1
+GET http://localhost:999/chat?token=TN58EN HTTP/1.1
 Host: localhost:999
 User-Agent: Composer
 
 
 HTTP/1.1 200 OK
-Date: Sun, 22 Mar 2015 18:31:38 GMT
-Content-length: 36
+Date: Tue, 24 Mar 2015 12:07:37 GMT
+Access-control-allow-origin: *
+Content-length: 38
 
-{"messages":["ok"],"token":"TN19EN"}
+{"messages":["kgsa"],"token":"TN19EN"}
