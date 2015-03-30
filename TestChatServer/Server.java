@@ -109,10 +109,10 @@ public class Server implements HttpHandler {
     		InfoMessage infoMessage = history.get(idOfChangeMessage);
     		infoMessage.setText(messageChange.getText());
     		infoMessage.setChange(true);
-    	}
-     } catch (ParseException e) {
-        System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
-     }	
+    	   }
+        } catch (ParseException e) {
+          System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
+        }	
     }
     private void sendResponse(HttpExchange httpExchange, String response) {
         try {

@@ -32,7 +32,9 @@ public class MessageExchange {
     }
 
     public InfoMessage getClientMessage(InputStream inputStream) throws ParseException {
-        return InfoMessage.parseInfoMessage((JSONObject) getJSONObject(inputStreamToString(inputStream)).get("message"));
+        JSONObject json = getJSONObject(inputStreamToString(inputStream));
+        System.out.println(json.toString());
+    	return InfoMessage.parseInfoMessage((JSONObject) json.get("message")); 
     }
 
     public JSONObject getJSONObject(String json) throws ParseException {

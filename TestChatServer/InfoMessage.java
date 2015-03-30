@@ -19,6 +19,17 @@ public class InfoMessage implements JSONAware {
 		this.text = text;
 		id = -1;		
 	}
+	public InfoMessage(int id, String nameUser, String message) {
+		this.id = id;
+		this.nameUser = nameUser;
+		this.text = message;
+	}
+	public void setMessage(String message) {
+		this.text = message;
+	}
+	public void setNameUser(String nameUser) {
+		this.nameUser = nameUser;
+	}
 	public void setID(int id) {
 		this.id = id;
 	}
@@ -53,18 +64,17 @@ public class InfoMessage implements JSONAware {
 			this.setDelete(true);
 		}
 	}
-	
 	public static InfoMessage parseInfoMessage(JSONObject obj){
 		InfoMessage info = new InfoMessage();
-		if((String)obj.get("user") != null) {
-		info.nameUser = (String)obj.get("user");
-		}
-		info.text = (String)obj.get("message");
-		info.id = Integer.parseInt(obj.get("id").toString());
+		
+		info.setNameUser((String)obj.get("user"));
+		info.setMessage((String)obj.get("message"));
+		info.setID(Integer.parseInt(obj.get("id").toString()));
 		return info;
 	}	
+
 	@Override
-	public String toJSONString(){
+	public String toJSONString() {
 		JSONObject obj = new JSONObject();
 		obj.put("user", nameUser);
 		obj.put("message", text);
@@ -72,11 +82,11 @@ public class InfoMessage implements JSONAware {
 		return obj.toString();
 	}
 	@Override
-	public String toString(){
+	public String toString() {
 		return nameUser+" : "+text;
 	}
 	@Override
-	public boolean equals(Object obj){
+	public boolean equals(Object obj) {
 		return (((InfoMessage)obj).getID()==id);
 	}
 }
