@@ -31,7 +31,6 @@ public class MessageExchange {
 
     public InfoMessage getClientMessage(InputStream inputStream) throws ParseException {
         JSONObject json = getJSONObject(inputStreamToString(inputStream));
-        System.out.println(json.toString());
     	return InfoMessage.parseInfoMessage((JSONObject) json); 
     }
 
