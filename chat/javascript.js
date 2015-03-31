@@ -51,6 +51,8 @@ function delegateEventSend(evtObj) {
             storeMessages(listForSaving);
 
             text.value = "";
+            var scrolbar = document.getElementById("allMessages");
+            document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
         }
     } else {
 
@@ -68,8 +70,10 @@ function delegateEventSend(evtObj) {
             listForSaving[index] = messageOption(select.text, index);
             storeMessages(listForSaving);
             select.selected = false;
-            
+
             sendText.value = null;
+
+            document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
         }   
 
     }
