@@ -99,8 +99,14 @@ function delegateEventSelect(evtObj) {
     var sendText = document.getElementById('sendText');
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
-    if (select.text != deleteIconUtfCode) {
-        var subindex = select.text.indexOf(":");
+
+    var subindex = select.text.indexOf(":");
+    var name = document.getElementById('name').value;
+    var surname = document.getElementById('surname').value;
+    var nameAndSurename = select.text.substring(0, subindex-1);
+    var myNameAndSurename = surname +" "+name;
+
+    if (select.text != deleteIconUtfCode && myNameAndSurename == nameAndSurename) {
         if (select.text.indexOf(changeIconUtfCode) != -1) {
             sendText.value = select.text.substring(subindex + 1, select.text.indexOf(changeIconUtfCode));
         } else {
