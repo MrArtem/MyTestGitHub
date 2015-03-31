@@ -30,7 +30,8 @@ function run() {
     appContainerSelect.addEventListener('click', delegateEventSelect);
     appContainerServer.addEventListener('click', delegateEventServer);
     appContainerEnterMessage.addEventListener('keypress', delegateEventEnterMessage);
-    
+
+    document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
 }
 function delegateEventSend(evtObj) {
     var index = document.getElementById("allMessages").selectedIndex;
@@ -55,7 +56,6 @@ function delegateEventSend(evtObj) {
             document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
         }
     } else {
-
         var sendText = document.getElementById('sendText');
         if (sendText.value != "") {
             var name = document.getElementById('name');
@@ -75,7 +75,6 @@ function delegateEventSend(evtObj) {
 
             document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
         }   
-
     }
 }
 function delegateEventEnterMessage(evtObj) {
@@ -119,7 +118,6 @@ function delegateEventSelect(evtObj) {
     } else {
             select.selected = false;
     }
-
 }
 
 function delegateEventServer(evtObj) {
