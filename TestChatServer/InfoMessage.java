@@ -64,7 +64,7 @@ public class InfoMessage implements JSONAware {
 			this.setDelete(true);
 		}
 	}
-	public static InfoMessage parseInfoMessage(JSONObject obj){
+	public static InfoMessage parseInfoMessage(JSONObject obj) {
 		InfoMessage info = new InfoMessage();
 		
 		info.setNameUser((String)obj.get("user"));
