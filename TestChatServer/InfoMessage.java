@@ -69,7 +69,9 @@ public class InfoMessage implements JSONAware {
 		
 		info.setNameUser((String)obj.get("user"));
 		info.setMessage((String)obj.get("message"));
+		if(obj.get("id") != null) {
 		info.setID(Integer.parseInt(obj.get("id").toString()));
+		}
 		return info;
 	}	
 

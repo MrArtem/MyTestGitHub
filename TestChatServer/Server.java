@@ -77,9 +77,9 @@ public class Server implements HttpHandler {
     private void doPost(HttpExchange httpExchange) {
         try {
             InfoMessage message = messageExchange.getClientMessage(httpExchange.getRequestBody());
-            System.out.println("Get Message from " + message);
             message.setID(history.size());
             history.add(message);
+            System.out.println("Get Message from " + message);
         } catch (ParseException e) {
             System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
         }
