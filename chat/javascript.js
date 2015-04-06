@@ -10,6 +10,10 @@ var infoLogin = function (name, surname) {
         surname: surname
     };
 };
+var appState = {
+    mainUrl: 'http://localhost:999/chat',
+    token: 'TE11EN'
+};
 var listForSaving = [];
 var deleteIconUtfCode = '\u2421';
 var changeIconUtfCode = '\u270e';
@@ -20,10 +24,7 @@ function run() {
     var appContainerEnterMessage = document.getElementById('sendText');
     var appContainerServer = document.getElementById('server');
 
-    if (restoreMessages() != null) {
-        var allMessages = restoreMessages();
-        createAllMessages(allMessages);
-    }
+    restoreMessages();
 
     appContainerSend.addEventListener('click', delegateEventSend);
     appContainerDelete.addEventListener('click', delegateEventDelete);
@@ -138,13 +139,17 @@ function storeInfoLogin(infoLogin) {
     }
     localStorage.setItem("Login info", JSON.stringify(infoLogin));
 }
-function restoreMessages(){
-    if (typeof (Storage) == "undefined") {
-        alert('local storage is not accessible');
-        return;
-    }
-    var item = localStorage.getItem("list messages");
-    return item && JSON.parse(item);
+function restoreMessages(continueWith) {
+    var url = appState.mainUrl + '?token=' + appState.token;
+
+    get(url, function (responseText) {
+        console.assert(responseText != null);
+
+        var response = JSON.parse(responseText).messages;
+        createAllMessages(response);
+
+        continueWith && continueWith();
+    });
 }
 function restoreLoginInfo() {
     if (typeof (Storage) == "undefined") {
@@ -164,9 +169,9 @@ function addAllMessages(message) {
     
         var select = document.getElementById('allMessages');
         var option = document.createElement("option");
-        option.text = message.message;
+        option.text = message.user+" : "+message.message;
         option.value = message.id;
-
+        
         select.add(option);
     
 }
@@ -272,3 +277,63 @@ $(function () {
     });
 });
 
+
+function defaultErrorHandler(message) {
+    console.error(message);
+    output(message);
+}
+
+function get(url, continueWith, continueWithError) {
+    ajax('GET', url, null, continueWith, continueWithError);
+}
+function isError(text) {
+    if (text == "")
+        return false;
+
+    try {
+        var obj = JSON.parse(text);
+    } catch (ex) {
+        return true;
+    }
+
+    return !!obj.error;
+}
+function ajax(method, url, data, continueWith, continueWithError) {
+    var xhr = new XMLHttpRequest();
+
+    continueWithError = continueWithError || defaultErrorHandler;
+    xhr.open(method || 'GET', url, true);
+
+    xhr.onload = function () {
+        if (xhr.readyState !== 4)
+            return;
+
+        if (xhr.status != 200) {
+            continueWithError('Error on the server side, response ' + xhr.status);
+            return;
+        }
+
+        if (isError(xhr.responseText)) {
+            continueWithError('Error on the server side, response ' + xhr.responseText);
+            return;
+        }
+
+        continueWith(xhr.responseText);
+    };
+
+    xhr.ontimeout = function () {
+        ontinueWithError('Server timed out !');
+    }
+
+    xhr.onerror = function (e) {
+        var errMsg = 'Server connection error !\n' +
+    	'\n' +
+    	'Check if \n' +
+    	'- server is active\n' +
+    	'- server sends header "Access-Control-Allow-Origin:*"';
+
+        continueWithError(errMsg);
+    };
+
+    xhr.send(data);
+}
