@@ -10,7 +10,7 @@ public class InfoMessage implements JSONAware {
 	private boolean changed = false;
 	
 	public InfoMessage() {
-		nameUser = "1";
+		nameUser = "none";
 		text = "";
 		id = -1;		
 	}
@@ -93,6 +93,6 @@ public class InfoMessage implements JSONAware {
 	}
 	@Override
     public int hashCode() {
-   return 1*id+2*text.hashCode()+3*nameUser.hashCode();
+         return 1*id+2*text.hashCode()+3*nameUser.hashCode();
  }
 }
