@@ -91,4 +91,8 @@ public class InfoMessage implements JSONAware {
 	public boolean equals(Object obj) {
 		return (((InfoMessage)obj).getID()==id);
 	}
+	@Override
+    public int hashCode() {
+   return 1*id+2*text.hashCode()+3*nameUser.hashCode();
+ }
 }
