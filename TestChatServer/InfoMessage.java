@@ -51,7 +51,7 @@ public class InfoMessage implements JSONAware {
 	public String getText() {
 		return text;
 	}
-	public boolean getDelete() {
+	public boolean isDelete() {
 		return deleted;
 	}
 	public boolean getChange() {
