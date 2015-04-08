@@ -6,8 +6,8 @@ public class InfoMessage implements JSONAware {
 	private String nameUser;
 	private int id;
 	private String text;
-	private boolean deleted = false;
-	private boolean changed = false;
+	private boolean deleted;
+	private boolean changed;
 	
 	public InfoMessage() {
 		nameUser = "none";
