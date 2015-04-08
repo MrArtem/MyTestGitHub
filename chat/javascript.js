@@ -146,10 +146,12 @@ function restoreMessages(continueWith) {
         console.assert(responseText != null);
 
         var response = JSON.parse(responseText).messages;
+        deleteMessages();
         createAllMessages(response);
 
         continueWith && continueWith();
     });
+    setTimeout(restoreMessages, 1000);
 }
 function restoreLoginInfo() {
     if (typeof (Storage) == "undefined") {
@@ -161,9 +163,9 @@ function restoreLoginInfo() {
 }
 function createAllMessages(allMessages) {
     for (var i = 0; i < allMessages.length; i++) {
-        listForSaving.push(allMessages[i]);
-        addAllMessages(allMessages[i]);
-    }
+          listForSaving.push(allMessages[i]);
+          addAllMessages(allMessages[i]);
+        }
 }
 function addAllMessages(message) {
     
@@ -171,10 +173,17 @@ function addAllMessages(message) {
         var option = document.createElement("option");
         option.text = message.user+" : "+message.message;
         option.value = message.id;
-        
+
         select.add(option);
-    
-}
+ }
+ function deleteMessages() {
+     listForSaving = [];
+     var select = document.getElementById("allMessages");
+     var length = select.options.length;
+     for (i = 0; i < length; i++) {
+         select.options[0] = null;
+     }
+ }
 function ActiveInfoLogin() {
     var infoLogin = restoreLoginInfo();
     var name = document.getElementById('name');
@@ -322,7 +331,7 @@ function ajax(method, url, data, continueWith, continueWithError) {
     };
 
     xhr.ontimeout = function () {
-        ontinueWithError('Server timed out !');
+        continueWithError('Server timed out !');
     }
 
     xhr.onerror = function (e) {
