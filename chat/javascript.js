@@ -1,6 +1,7 @@
-var messageOption = function(text,value) {
+var messageOption = function(text,user,value) {
     return {
         message: text,
+        user: user,
         id: value
     };
 };
@@ -44,13 +45,18 @@ function delegateEventSend(evtObj) {
 
             var select = document.getElementById("allMessages");
             var option = document.createElement("option");
+
             option.text = surname.value + " " + name.value + " : " + text.value;
             option.value = select.length;
 
             select.add(option);
+            listForSaving.push(sendMessage);
 
-            listForSaving.push(messageOption(option.text, option.value));
-            storeMessages(listForSaving);
+            var sendMessage =  messageOption(text.value, surname.value + " " + name.value, option.value);
+
+            storeMessages(sendMessage, function () {
+                
+            });
 
             text.value = "";
             var scrolbar = document.getElementById("allMessages");
@@ -68,7 +74,7 @@ function delegateEventSend(evtObj) {
 
             select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + changeIconUtfCode;
 
-            listForSaving[index] = messageOption(select.text, index);
+            listForSaving[index] = messageOption(sendText.value + "  " + changeIconUtfCode, surname.value + " " + name.value, index);
             storeMessages(listForSaving);
             select.selected = false;
 
@@ -125,12 +131,10 @@ function delegateEventServer(evtObj) {
     $("#server").removeClass('btn btn-success');
     $("#server").addClass('btn btn-danger');
 }
-function storeMessages(listForSaving) {
-    if (typeof (Storage) == "undefined") {
-        alert('localStorage is not accessible');
-        return;
-    }
-    localStorage.setItem("list messages", JSON.stringify(listForSaving));
+function storeMessages(sendMessage,continueWith) {
+    post(appState.mainUrl, JSON.stringify(sendMessage), function () {
+        restoreMessages();
+    });
 }
 function storeInfoLogin(infoLogin) {
     if (typeof (Storage) == "undefined") {
@@ -151,7 +155,7 @@ function restoreMessages(continueWith) {
 
         continueWith && continueWith();
     });
-    setTimeout(restoreMessages, 1000);
+    setTimeout(restoreMessages, 1000000000);
 }
 function restoreLoginInfo() {
     if (typeof (Storage) == "undefined") {
@@ -171,7 +175,7 @@ function addAllMessages(message) {
     
         var select = document.getElementById('allMessages');
         var option = document.createElement("option");
-        option.text = message.user+" : "+message.message;
+        option.text = message.user + " : " + message.message;
         option.value = message.id;
 
         select.add(option);
@@ -294,6 +298,9 @@ function defaultErrorHandler(message) {
 
 function get(url, continueWith, continueWithError) {
     ajax('GET', url, null, continueWith, continueWithError);
+}
+function post(url, data, continueWith, continueWithError) {
+    ajax('POST', url, data, continueWith, continueWithError);
 }
 function isError(text) {
     if (text == "")
