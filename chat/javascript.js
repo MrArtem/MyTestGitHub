@@ -155,7 +155,7 @@ function restoreMessages(continueWith) {
 
         continueWith && continueWith();
     });
-    setTimeout(restoreMessages, 1000000000);
+    setTimeout(restoreMessages, 1000);
 }
 function restoreLoginInfo() {
     if (typeof (Storage) == "undefined") {
