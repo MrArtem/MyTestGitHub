@@ -65,20 +65,14 @@ function delegateEventSend(evtObj) {
 
             var index = document.getElementById("allMessages").selectedIndex;
             var select = document.getElementById("allMessages")[index];
-
-
             
             var changeMessage = messageOption(sendText.value + "  " + changeIconUtfCode, surname.value + " " + name.value, index);
-
-            
             changeMessages(changeMessage, function () {
             
             });
            
             select.selected = false;
-
             sendText.value = null;
-
             document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
         }
     }
@@ -97,10 +91,9 @@ function delegateEventDelete(evtObj) {
     var index = document.getElementById("allMessages").selectedIndex;
     var select = document.getElementById("allMessages")[index];
 
-    select.text = deleteIconUtfCode;
-
-    listForSaving[index] = messageOption(deleteIconUtfCode, index);
-    storeMessages(listForSaving);
+    deleteMessage(index, function () {
+    });
+    
     sendText.value = "";
     select.selected = false;
 }
@@ -115,7 +108,7 @@ function delegateEventSelect(evtObj) {
     var nameAndSurename = select.text.substring(0, subindex - 1);
     var myNameAndSurename = surname + " " + name;
 
-    if (select.text != deleteIconUtfCode && myNameAndSurename == nameAndSurename) {
+    if (select.text != nameAndSurename+" : message has deleted." && myNameAndSurename == nameAndSurename) {
         if (select.text.indexOf(changeIconUtfCode) != -1) {
             sendText.value = select.text.substring(subindex + 2, select.text.indexOf(changeIconUtfCode));
         } else {
@@ -149,7 +142,6 @@ function restoreMessages(continueWith) {
         console.assert(responseText != null);
 
         var response = JSON.parse(responseText).messages;
-        deleteMessages();
         createAllMessages(response);
 
         continueWith && continueWith();
@@ -170,8 +162,10 @@ function updateMessages(continueWith) {
             if (message.requst == "PUT") {
                 addChangeMessage(message);
             }
+            if (message.requst == "DELETE") {
+                addDeleteMessage(message);
+            }
         }
-
 
         continueWith && continueWith();
     });
@@ -207,12 +201,11 @@ function addChangeMessage(message) {
         listForSaving[message.id] = message;
     }
 }
-function deleteMessages() {
-    listForSaving = [];
-    var select = document.getElementById("allMessages");
-    var length = select.options.length;
-    for (i = 0; i < length; i++) {
-        select.options[0] = null;
+function addDeleteMessage(message) {
+    if (listForSaving[message.id] != null) {
+        var select = document.getElementById("allMessages")[message.id];
+        select.text = message.user + " : " + message.message;
+        listForSaving[message.id] = message;
     }
 }
 function ActiveInfoLogin() {
@@ -226,9 +219,17 @@ function ActiveInfoLogin() {
 function LogOutFromChat() {
     storeInfoLogin(null);
 }
-function changeMessages(changeMessage,continueWith) {
+function changeMessages(changeMessage, continueWith) {
     put(appState.mainUrl, JSON.stringify(changeMessage), function () {
         updateMessages();
+    });
+}
+function deleteMessage(index,continueWith) {
+ var indexToken = index*8+11; 
+ var url = appState.mainUrl + '?token=' + "TN" +indexToken.toString() + "EN";
+    del(url, function () {
+
+     continueWith && continueWith();
     });
 }
 $(document).ready(function () {
@@ -336,6 +337,9 @@ function post(url, data, continueWith, continueWithError) {
 }
 function put(url, data, continueWith, continueWithError) {
     ajax('PUT', url, data, continueWith, continueWithError);
+}
+function del(url, continueWith, continueWithError) {
+    ajax('DELETE', url, null, continueWith, continueWithError);
 }
 function isError(text) {
     if (text == "")

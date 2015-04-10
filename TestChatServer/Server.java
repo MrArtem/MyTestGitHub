@@ -98,6 +98,7 @@ public class Server implements HttpHandler {
     		 }
     		 if(index != -1) {
     		 InfoMessage message = history.get(index);
+    		 message.setRequst("DELETE");
     		 String messageForDelete = message.getText();
     		 message.deleteMessage();
     		 System.out.println("Delete Message : " + message.getNameUser() + " : " + messageForDelete);
@@ -114,7 +115,7 @@ public class Server implements HttpHandler {
     		infoMessage.setText(messageChange.getText());    		
     		infoMessage.setChange(true);
     		infoMessage.setRequst("PUT");
-    		System.out.println("Change :"+infoMessage.toJSONString());
+    		System.out.println("Chnage :"+infoMessage.toJSONString());
     	    }
     	   }
         } catch (ParseException e) {
