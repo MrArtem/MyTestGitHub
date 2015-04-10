@@ -114,7 +114,7 @@ public class Server implements HttpHandler {
     		infoMessage.setText(messageChange.getText());    		
     		infoMessage.setChange(true);
     		infoMessage.setRequst("PUT");
-    		System.out.println("Chnage :"+infoMessage.toJSONString());
+    		System.out.println("Change :"+infoMessage.toJSONString());
     	    }
     	   }
         } catch (ParseException e) {

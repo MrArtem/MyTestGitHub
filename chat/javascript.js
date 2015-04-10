@@ -67,10 +67,10 @@ function delegateEventSend(evtObj) {
             var select = document.getElementById("allMessages")[index];
 
 
-            select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + changeIconUtfCode;
+            
             var changeMessage = messageOption(sendText.value + "  " + changeIconUtfCode, surname.value + " " + name.value, index);
 
-            listForSaving[index] = changeMessage;
+            
             changeMessages(changeMessage, function () {
             
             });
@@ -117,7 +117,7 @@ function delegateEventSelect(evtObj) {
 
     if (select.text != deleteIconUtfCode && myNameAndSurename == nameAndSurename) {
         if (select.text.indexOf(changeIconUtfCode) != -1) {
-            sendText.value = select.text.substring(subindex + 1, select.text.indexOf(changeIconUtfCode));
+            sendText.value = select.text.substring(subindex + 2, select.text.indexOf(changeIconUtfCode));
         } else {
             sendText.value = select.text.substring(subindex + 1);
         }
@@ -132,7 +132,7 @@ function delegateEventServer(evtObj) {
 }
 function storeMessages(sendMessage, continueWith) {
     post(appState.mainUrl, JSON.stringify(sendMessage), function () {
-
+        updateMessages();
     });
 }
 function storeInfoLogin(infoLogin) {
@@ -167,6 +167,9 @@ function updateMessages(continueWith) {
             if (message.requst == "POST") {
                 addAllMessages(message);
             }
+            if (message.requst == "PUT") {
+                addChangeMessage(message);
+            }
         }
 
 
@@ -195,7 +198,14 @@ function addAllMessages(message) {
         option.value = message.id;
         listForSaving.push(message);
         select.add(option);
-    } 
+    }
+}
+function addChangeMessage(message) {
+    if (listForSaving[message.id] != null) {
+        var select = document.getElementById("allMessages")[message.id];
+        select.text = message.user + " : " + message.message;
+        listForSaving[message.id] = message;
+    }
 }
 function deleteMessages() {
     listForSaving = [];
