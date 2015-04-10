@@ -1,4 +1,4 @@
-var messageOption = function(text,user,value) {
+var messageOption = function (text, user, value) {
     return {
         message: text,
         user: user,
@@ -26,6 +26,7 @@ function run() {
     var appContainerServer = document.getElementById('server');
 
     restoreMessages();
+    updateMessages();
 
     appContainerSend.addEventListener('click', delegateEventSend);
     appContainerDelete.addEventListener('click', delegateEventDelete);
@@ -46,18 +47,12 @@ function delegateEventSend(evtObj) {
             var select = document.getElementById("allMessages");
             var option = document.createElement("option");
 
-            option.text = surname.value + " " + name.value + " : " + text.value;
-            option.value = select.length;
-
-            select.add(option);
-            listForSaving.push(sendMessage);
-
-            var sendMessage =  messageOption(text.value, surname.value + " " + name.value, option.value);
+            var sendMessage = messageOption(text.value, surname.value + " " + name.value, select.length);
 
             storeMessages(sendMessage, function () {
-                
+            
             });
-
+           
             text.value = "";
             var scrolbar = document.getElementById("allMessages");
             document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
@@ -73,15 +68,19 @@ function delegateEventSend(evtObj) {
 
 
             select.text = surname.value + " " + name.value + " : " + sendText.value + "  " + changeIconUtfCode;
+            var changeMessage = messageOption(sendText.value + "  " + changeIconUtfCode, surname.value + " " + name.value, index);
 
-            listForSaving[index] = messageOption(sendText.value + "  " + changeIconUtfCode, surname.value + " " + name.value, index);
-            storeMessages(listForSaving);
+            listForSaving[index] = changeMessage;
+            changeMessages(changeMessage, function () {
+            
+            });
+           
             select.selected = false;
 
             sendText.value = null;
 
             document.getElementById("allMessages").scrollTop = document.getElementById("allMessages").scrollHeight;
-        }   
+        }
     }
 }
 function delegateEventEnterMessage(evtObj) {
@@ -113,8 +112,8 @@ function delegateEventSelect(evtObj) {
     var subindex = select.text.indexOf(":");
     var name = document.getElementById('name').value;
     var surname = document.getElementById('surname').value;
-    var nameAndSurename = select.text.substring(0, subindex-1);
-    var myNameAndSurename = surname +" "+name;
+    var nameAndSurename = select.text.substring(0, subindex - 1);
+    var myNameAndSurename = surname + " " + name;
 
     if (select.text != deleteIconUtfCode && myNameAndSurename == nameAndSurename) {
         if (select.text.indexOf(changeIconUtfCode) != -1) {
@@ -123,7 +122,7 @@ function delegateEventSelect(evtObj) {
             sendText.value = select.text.substring(subindex + 1);
         }
     } else {
-            select.selected = false;
+        select.selected = false;
     }
 }
 
@@ -131,9 +130,9 @@ function delegateEventServer(evtObj) {
     $("#server").removeClass('btn btn-success');
     $("#server").addClass('btn btn-danger');
 }
-function storeMessages(sendMessage,continueWith) {
+function storeMessages(sendMessage, continueWith) {
     post(appState.mainUrl, JSON.stringify(sendMessage), function () {
-        restoreMessages();
+
     });
 }
 function storeInfoLogin(infoLogin) {
@@ -155,7 +154,25 @@ function restoreMessages(continueWith) {
 
         continueWith && continueWith();
     });
-    setTimeout(restoreMessages, 1000);
+}
+function updateMessages(continueWith) {
+    var url = appState.mainUrl + '?token=' + appState.token;
+
+    get(url, function (responseText) {
+        console.assert(responseText != null);
+
+        var response = JSON.parse(responseText).messages;
+        for (var i = 0; i < response.length; i++) {
+            var message = response[i];
+            if (message.requst == "POST") {
+                addAllMessages(message);
+            }
+        }
+
+
+        continueWith && continueWith();
+    });
+    setTimeout(updateMessages, 1000);
 }
 function restoreLoginInfo() {
     if (typeof (Storage) == "undefined") {
@@ -167,27 +184,27 @@ function restoreLoginInfo() {
 }
 function createAllMessages(allMessages) {
     for (var i = 0; i < allMessages.length; i++) {
-          listForSaving.push(allMessages[i]);
-          addAllMessages(allMessages[i]);
-        }
+        addAllMessages(allMessages[i]);
+    }
 }
 function addAllMessages(message) {
-    
+    if (listForSaving[message.id] == null) {
         var select = document.getElementById('allMessages');
         var option = document.createElement("option");
         option.text = message.user + " : " + message.message;
         option.value = message.id;
-
+        listForSaving.push(message);
         select.add(option);
- }
- function deleteMessages() {
-     listForSaving = [];
-     var select = document.getElementById("allMessages");
-     var length = select.options.length;
-     for (i = 0; i < length; i++) {
-         select.options[0] = null;
-     }
- }
+    } 
+}
+function deleteMessages() {
+    listForSaving = [];
+    var select = document.getElementById("allMessages");
+    var length = select.options.length;
+    for (i = 0; i < length; i++) {
+        select.options[0] = null;
+    }
+}
 function ActiveInfoLogin() {
     var infoLogin = restoreLoginInfo();
     var name = document.getElementById('name');
@@ -198,6 +215,11 @@ function ActiveInfoLogin() {
 }
 function LogOutFromChat() {
     storeInfoLogin(null);
+}
+function changeMessages(changeMessage,continueWith) {
+    put(appState.mainUrl, JSON.stringify(changeMessage), function () {
+        updateMessages();
+    });
 }
 $(document).ready(function () {
     var isNotLogin = restoreLoginInfo() == null;
@@ -301,6 +323,9 @@ function get(url, continueWith, continueWithError) {
 }
 function post(url, data, continueWith, continueWithError) {
     ajax('POST', url, data, continueWith, continueWithError);
+}
+function put(url, data, continueWith, continueWithError) {
+    ajax('PUT', url, data, continueWith, continueWithError);
 }
 function isError(text) {
     if (text == "")

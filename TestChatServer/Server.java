@@ -51,6 +51,8 @@ public class Server implements HttpHandler {
         	doDelete(httpExchange);
         } else if ("PUT".equals(httpExchange.getRequestMethod())) {
         	doPut(httpExchange);
+        }else if ("OPTIONS".equals(httpExchange.getRequestMethod())) {
+            response = "";
         }
           else {
             response = "Unsupported http method: " + httpExchange.getRequestMethod();
@@ -78,6 +80,7 @@ public class Server implements HttpHandler {
         try {
             InfoMessage message = messageExchange.getClientMessage(httpExchange.getRequestBody());
             message.setID(history.size());
+            message.setRequst("POST");
             history.add(message);
             System.out.println("Get Message from " + message);
         } catch (ParseException e) {
@@ -108,8 +111,10 @@ public class Server implements HttpHandler {
     	if(idOfChangeMessage >= 0 && idOfChangeMessage < history.size()) {
     	   if(messageChange.isDelete() == false) {
     		InfoMessage infoMessage = history.get(idOfChangeMessage);
-    		infoMessage.setText(messageChange.getText());
+    		infoMessage.setText(messageChange.getText());    		
     		infoMessage.setChange(true);
+    		infoMessage.setRequst("PUT");
+    		System.out.println("Chnage :"+infoMessage.toJSONString());
     	    }
     	   }
         } catch (ParseException e) {
@@ -121,6 +126,9 @@ public class Server implements HttpHandler {
             byte[] bytes = response.getBytes();
             Headers headers = httpExchange.getResponseHeaders();
             headers.add("Access-Control-Allow-Origin","*");
+            if("OPTIONS".equals(httpExchange.getRequestMethod())) {
+                headers.add("Access-Control-Allow-Methods","PUT, DELETE, POST, GET, OPTIONS");
+            }
             httpExchange.sendResponseHeaders(200, bytes.length);
             OutputStream os = httpExchange.getResponseBody();
             os.write( bytes);

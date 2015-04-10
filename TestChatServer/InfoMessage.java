@@ -6,8 +6,9 @@ public class InfoMessage implements JSONAware {
 	private String nameUser;
 	private int id;
 	private String text;
-	private boolean deleted;
-	private boolean changed;
+	private boolean deleted = false;
+	private boolean changed = false;
+	private String requst;
 	
 	public InfoMessage() {
 		nameUser = "none";
@@ -23,6 +24,9 @@ public class InfoMessage implements JSONAware {
 		this.id = id;
 		this.nameUser = nameUser;
 		this.text = message;
+	}
+	public void setRequst(String requst) {
+		this.requst = requst;
 	}
 	public void setMessage(String message) {
 		this.text = message;
@@ -41,6 +45,9 @@ public class InfoMessage implements JSONAware {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public String getRequst() {
+		return requst;
 	}
 	public String getNameUser() {
 		return nameUser;
@@ -81,6 +88,7 @@ public class InfoMessage implements JSONAware {
 		obj.put("user", nameUser);
 		obj.put("message", text);
 		obj.put("id", id);
+		obj.put("requst", requst);
 		return obj.toString();
 	}
 	@Override
@@ -91,8 +99,4 @@ public class InfoMessage implements JSONAware {
 	public boolean equals(Object obj) {
 		return (((InfoMessage)obj).getID()==id);
 	}
-	@Override
-    public int hashCode() {
-         return 1*id+2*text.hashCode()+3*nameUser.hashCode();
- }
 }

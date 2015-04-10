@@ -3,7 +3,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.sound.midi.MidiDevice.Info;
 
 public class MessageExchange {
 
@@ -20,8 +23,9 @@ public class MessageExchange {
 
     public String getServerResponse(List<InfoMessage> messages) {
         JSONObject jsonObject = new JSONObject();
+        
         jsonObject.put("messages", messages);
-        jsonObject.put("token", getToken(messages.size()));
+        jsonObject.put("token", getToken(messages.size()));       
         return jsonObject.toJSONString();
     }
 
