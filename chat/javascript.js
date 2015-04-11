@@ -120,8 +120,8 @@ function delegateEventSelect(evtObj) {
 }
 
 function delegateEventServer(evtObj) {
-    $("#server").removeClass('btn btn-success');
-    $("#server").addClass('btn btn-danger');
+    $("#server").removeClass('btn btn-danger');
+    $("#server").addClass('btn btn-success');
 }
 function storeMessages(sendMessage, continueWith) {
     post(appState.mainUrl, JSON.stringify(sendMessage), function () {
@@ -140,7 +140,7 @@ function restoreMessages(continueWith) {
 
     get(url, function (responseText) {
         console.assert(responseText != null);
-
+        delegateEventServer();
         var response = JSON.parse(responseText).messages;
         createAllMessages(response);
 
@@ -152,7 +152,7 @@ function updateMessages(continueWith) {
 
     get(url, function (responseText) {
         console.assert(responseText != null);
-
+        delegateEventServer();
         var response = JSON.parse(responseText).messages;
         for (var i = 0; i < response.length; i++) {
             var message = response[i];
@@ -325,8 +325,8 @@ $(function () {
 
 
 function defaultErrorHandler(message) {
-    console.error(message);
-    output(message);
+    $("#server").removeClass('btn btn-success');
+    $("#server").addClass('btn btn-danger');
 }
 
 function get(url, continueWith, continueWithError) {
