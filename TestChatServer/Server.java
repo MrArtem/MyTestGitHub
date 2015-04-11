@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements HttpHandler {
     private List<InfoMessage> history = new ArrayList<InfoMessage>();
     private MessageExchange messageExchange = new MessageExchange();
-
+    private int currentId = 0;
+    private Lock lock = new ReentrantLock();
+    
     public static void main(String[] args) {
         if (args.length != 1)
             System.out.println("Usage: java Server port");
@@ -79,7 +83,14 @@ public class Server implements HttpHandler {
     private void doPost(HttpExchange httpExchange) {
         try {
             InfoMessage message = messageExchange.getClientMessage(httpExchange.getRequestBody());
-            message.setID(history.size());
+            
+            lock.lock();
+            try {
+            	message.setID(currentId++);
+            } finally {
+            	lock.unlock();
+            }
+            
             message.setRequst("POST");
             history.add(message);
             System.out.println("Get Message from " + message);
